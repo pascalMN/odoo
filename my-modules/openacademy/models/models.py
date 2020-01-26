@@ -17,6 +17,7 @@
 #         for record in self:
 #             record.value2 = float(record.value) / 100
 
+from datetime import timedelta
 from odoo import models, fields, api, exceptions
 
 
@@ -62,6 +63,7 @@ class Session(models.Model):
     duration = fields.Float(digits=(6, 2), help="Duration in days")
     seats = fields.Integer(string="Number of seats")
     active = fields.Boolean(default=True)
+    color = fields.Integer()
 
     instructor_id = fields.Many2one('res.partner', string="Instructor",
                                     domain=['|', ('instructor', '=', True),
@@ -71,6 +73,45 @@ class Session(models.Model):
     attendee_ids = fields.Many2many('res.partner', string="Attendees")
 
     taken_seats = fields.Float(string="Taken seats", compute='_taken_seats')
+    end_date = fields.Date(string="End Date", store=True,
+                           compute='_get_end_date', inverse='_set_end_date')
+
+    hours = fields.Float(string="Duration in hours",
+                         compute='_get_hours', inverse='_set_hours')
+
+    attendees_count = fields.Integer(
+        string="Attendees count", compute='_get_attendees_count', store=True)
+
+    @api.depends('duration')
+    def _get_hours(self):
+        for r in self:
+            r.hours = r.duration * 24
+
+    def _set_hours(self):
+        for r in self:
+            r.duration = r.hours / 24
+
+    @api.depends('attendee_ids')
+    def _get_attendees_count(self):
+        for r in self:
+            r.attendees_count = len(r.attendee_ids)
+
+    @api.depends('start_date', 'duration')
+    def _get_end_date(self):
+        for r in self:
+            if not (r.end_date and r.duration):
+                r.end_date = r.start_date
+                continue
+
+            duration = timedelta(days=r.duration, seconds=-1)
+            r.end_date = r.start_date + duration
+
+    def _set_end_date(self):
+        for r in self:
+            if not (r.start_date and r.end_date):
+                continue
+
+            r.duration = (r.end_date - r.start_date).days + 1
 
     @api.depends('seats', 'attendee_ids')
     def _taken_seats(self):
