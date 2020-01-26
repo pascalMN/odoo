@@ -88,6 +88,9 @@
                             <field name="seats"/>
                             <field name="taken_seats" widget="progressbar"/>
                         </group>
+                        <group string="Attenders">
+                            <field name="attendee_ids"/>
+                        </group>
                     </group>
                 </sheet>
             </form>
