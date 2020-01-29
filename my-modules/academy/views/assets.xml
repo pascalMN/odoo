@@ -1,0 +1,8 @@
+<odoo>
+    <template id="assets_common" inherit_id="web.assets_common">
+        <xpath expr="//script[last()]" position="after">
+            <script type="text/javascript" src="/academy/static/src/js/greeting.js"/>
+            <script type="text/javascript" src="/academy/static/src/js/hello_world.js"/>
+        </xpath>
+    </template>
+</odoo>
