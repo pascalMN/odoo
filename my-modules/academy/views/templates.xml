@@ -3,6 +3,7 @@
         <t t-call="website.layout">
             <t t-set="title">Academy</t>
             <h3><t t-esc="greeting"/></h3>
+            <test-element name="Mateusz"></test-element>
             <div class="oe_structure">
                 <div class="container">
                     <t t-foreach="teachers" t-as="teacher">
