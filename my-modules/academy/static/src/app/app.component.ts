@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {ChangeDetectorRef, Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +7,13 @@ import { Component, Input } from '@angular/core';
 })
 export class AppComponent {
   @Input() name: string;
+
+  clicks: number = 0;
+
+  constructor(private cd: ChangeDetectorRef) { }
+
+  onClick() {
+    this.clicks = this.clicks + 1;
+    this.cd.detectChanges();
+  }
 }
