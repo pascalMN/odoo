@@ -16,7 +16,7 @@ if (!production) {
 function bundle() {
     return gulp.src(files)
         .pipe(concat('elements.js'))
-        .pipe(gulp.dest('./dist/static'))
+        .pipe(gulp.dest('./elements'))
 }
 
 gulp.task('bundle', function () {
